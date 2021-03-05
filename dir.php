@@ -34,6 +34,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
             <tr>
                 <th>Type</th>
                 <th>Name</th>
+                <th>Action</th>
 
             </tr>
         </thead>
@@ -54,9 +55,16 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
                 } else {
                     $type = 'File';
                     $name = $dirResult;
+                    $buttons = '<form action="" method="POST">
+                                <button type="submit" name="delete" value="' . $dirResult . '">Delete</button>
+                            </form>
+                            <form action="" method="POST">
+                                <button type="submit" name="download" value="' . $dirResult . '">Download</button>
+                            </form>';
                 }
                 print('<tr><td>' . $type . '</td>');
                 print('<td>' . $name . '</td>');
+                print('<td>' . $buttons . '</td></tr>');
             }
 
 
@@ -88,22 +96,48 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
                 }
             }
 
+            if (isset($_POST['delete'])) {
+                unlink($_GET['path'] . $_POST['delete']);
+                header('Location: ' . $_SERVER['REQUEST_URI']);
+            }
 
-            
-
+            if(isset($_POST['download'])){
                 
-            
+                $file='./' . $_GET["path"] . $_POST['download'];
+              
+                $fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, null, 'utf-8'));
+                ob_clean();
+                ob_start();
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/pdf'); 
+                header('Content-Disposition: attachment; filename=' . basename($fileToDownloadEscaped));
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($fileToDownloadEscaped)); 
+                ob_end_flush();
+                readfile($fileToDownloadEscaped);
+                exit;
+            }
+        
+
+
+
+
+
+
 
             function createDirectory()
             {
-                
-                
+
+
                 $add = $_GET['path'] .   $_POST["add"];
                 mkdir($add);
                 echo "successfuly created";
             }
 
-            
+
 
             ?>
 
