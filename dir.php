@@ -1,5 +1,10 @@
 <?php session_start();
 
+
+$pathArray = explode('\\', getcwd());
+$lastPathElement = end($pathArray);
+
+
 if (isset($_GET['action']) and $_GET['action'] == 'logout') {
     session_start();
     unset($_SESSION['username']);
@@ -53,7 +58,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
                 print('<tr><td>' . $type . '</td>');
                 print('<td>' . $name . '</td>');
             }
-           
+
 
             if ($_SESSION['logout']) {
                 print($_SESSION['logout']);
@@ -76,19 +81,30 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
                     $errors[] = 'File size must be smaller than 2 MB';
                 }
                 if (empty($errors) == true) {
-                    move_uploaded_file($file_tmp, "./" . $file_name);
+                    move_uploaded_file($file_tmp, $_GET['path'] . $file_name);
                     echo "Success";
                 } else {
                     print_r($errors);
                 }
             }
 
+
+            
+
+                
+            
+
             function createDirectory()
             {
-                $add = $_POST["add"];
+                
+                
+                $add = $_GET['path'] .   $_POST["add"];
                 mkdir($add);
                 echo "successfuly created";
             }
+
+            
+
             ?>
 
 
@@ -117,7 +133,13 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
 
     <button onclick="history.go(-1);">Back </button>
 
+
+
     <a href="index.php?action=logout"><button>Logout</button></a>
+
+
+
+
 
 
 

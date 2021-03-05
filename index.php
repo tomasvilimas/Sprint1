@@ -32,7 +32,7 @@
 
     <?php
     if ($_SESSION['logged_in'] == true) {
-        header('Location: /snac/dir.php');
+        header ('Location: ./dir.php');
     }
     ?>
 
