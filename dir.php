@@ -1,10 +1,5 @@
 <?php session_start();
 
-
-$pathArray = explode('\\', getcwd());
-$lastPathElement = end($pathArray);
-
-
 if (isset($_GET['action']) and $_GET['action'] == 'logout') {
     session_start();
     unset($_SESSION['username']);
@@ -67,11 +62,11 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
                 print('<td>' . $buttons . '</td></tr>');
             }
 
-
             if ($_SESSION['logout']) {
                 print($_SESSION['logout']);
                 unset($_SESSION['logout']);
             }
+
 
             if (isset($_FILES['image'])) {
                 $errors = array();
@@ -101,44 +96,31 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
                 header('Location: ' . $_SERVER['REQUEST_URI']);
             }
 
-            if(isset($_POST['download'])){
-                
-                $file='./' . $_GET["path"] . $_POST['download'];
-              
+            if (isset($_POST['download'])) {
+
+                $file = './' . $_GET["path"] . $_POST['download'];
+
                 $fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, null, 'utf-8'));
                 ob_clean();
                 ob_start();
                 header('Content-Description: File Transfer');
-                header('Content-Type: application/pdf'); 
+                header('Content-Type: application/pdf');
                 header('Content-Disposition: attachment; filename=' . basename($fileToDownloadEscaped));
                 header('Content-Transfer-Encoding: binary');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                 header('Pragma: public');
-                header('Content-Length: ' . filesize($fileToDownloadEscaped)); 
+                header('Content-Length: ' . filesize($fileToDownloadEscaped));
                 ob_end_flush();
                 readfile($fileToDownloadEscaped);
                 exit;
             }
-        
-
-
-
-
-
-
-
             function createDirectory()
             {
-
-
                 $add = $_GET['path'] .   $_POST["add"];
                 mkdir($add);
                 echo "successfuly created";
             }
-
-
-
             ?>
 
 
@@ -166,8 +148,6 @@ if (isset($_GET['action']) and $_GET['action'] == 'logout') {
     </form>
 
     <button onclick="history.go(-1);">Back </button>
-
-
 
     <a href="index.php?action=logout"><button>Logout</button></a>
 
